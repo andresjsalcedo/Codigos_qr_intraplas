@@ -90,6 +90,12 @@ while True:
         #ID de los codigos QR
         codigo = letr + num
 
+    #SEMANA 
+    if 4 >= diasem >= 0:
+        
+      #ENTRADA DIURNO
+      if  8 >= h >= 12:
+
         if tipo == 71:
             #Dibujamos el rectangulo
             cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
@@ -113,11 +119,6 @@ while True:
                   "id: S", str(info[2:]))
 
 
-        #SEMANA 
-        if 4 >= diasem >= 0:
-        
-        #ENTRADA DIURNO
-            #if  8 >= h >= 12:
                   
             #Guardamos el ID 
             if codigo not in Entrada:             

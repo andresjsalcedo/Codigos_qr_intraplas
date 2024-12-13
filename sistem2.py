@@ -84,6 +84,14 @@ while True:
         # Control de impresión con tiempo entre registros
         current_time = time.time()
         if codigo != ultimo_codigo_detectado or (current_time - tiempo_ultimo_registro > 2):
+
+            
+          # SEMANA 
+          if 4 >= diasem >= 0:
+
+           #ENTRADA DIURNO
+           if 8 >= h >= 12:
+
             if tipo == 71:
                 # Dibujamos el rectangulo
                 cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
@@ -105,11 +113,7 @@ while True:
                 print("Registro de Area SISTEMAS exitosamente \n"
                       f"id: S{info[2:]}")
 
-            # SEMANA 
-            if 4 >= diasem >= 0:
 
-            #  ENTRADA DIURNO
-            #   if 8 >= h >= 12:
                 # Guardamos el ID 
                 if codigo not in Entrada:             
                     # Agregamos el ID
