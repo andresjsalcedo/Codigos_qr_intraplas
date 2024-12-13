@@ -83,14 +83,14 @@ while True:
 
         # Control de impresión con tiempo entre registros
         current_time = time.time()
-        if codigo != ultimo_codigo_detectado or (current_time - tiempo_ultimo_registro > 2):
+        if codigo != ultimo_codigo_detectado or (current_time - tiempo_ultimo_registro > 2.5):
 
             
           # SEMANA 
           if 4 >= diasem >= 0:
 
            #ENTRADA DIURNO
-           if 8 >= h >= 12:
+           if 6 >= h >= 8:
 
             if tipo == 71:
                 # Dibujamos el rectangulo
