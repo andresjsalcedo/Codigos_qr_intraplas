@@ -24,8 +24,6 @@ while True:
         tipo = info[0:2]
         tipo = int(tipo)
 
-   
-
 
         #Extraemos coordenadas  
         pts = np.array([codes.polygon], np.int32)

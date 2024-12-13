@@ -40,12 +40,13 @@ while True:
     #Interfaz
     cv2.putText(frame, 'Presiona ESC para salir', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
     #Ubicamos el rectangulo en las zonas extraidas
-    cv2.rectangle(frame, (180, 100), (470, 400), (0, 255, 0), 2)
+    cv2.rectangle(frame, (170, 100), (470, 400), (0, 255, 0), 2)
     
 
     #Extraemos la hora y fecha 
     hora, fecha = infhora()
     diasem = datetime.today().weekday()
+
     print(diasem)
 
     #AÑO #MES #DIA 
@@ -84,6 +85,28 @@ while True:
         #Redireccionamos
         pts = pts.reshape((-1, 1, 2))
 
+        if tipo == 71:
+            #Dibujamos el rectangulo
+            cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
+            cv2.putText(frame, 'G0' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+            print("Regitro de AREA RECURSOS exitosamente \n"
+                  "id: G", str(info[2:]))
+            
+        if tipo == 69:
+            #Dibujamos el rectangulo
+            cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
+            cv2.putText(frame, 'ED' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+            print("Registro de Area CONTABILIDAD exitosamente \n"
+                  "id: E", str(info[2:]))
+            
+
+        if tipo == 83:
+            #Dibujamos el rectangulo
+            cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
+            cv2.putText(frame, 'S0' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+            print("Registro de Area SISTEMAS exitosamente \n"
+                  "id: S", str(info[2:]))
+
         #ID de los codigos QR
         codigo = letr + num
 
@@ -91,30 +114,10 @@ while True:
         #SEMANA 
         if 4 >= diasem >= 0:
         
-
         #ENTRADA DIURNO
-        #   if  2 >= h >= 12:
-
-            if tipo == 71:
-            #Dibujamos el rectangulo
-                cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
-            cv2.putText(frame, 'G0' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
-            print("Regitro de AREA RECURSOS exitosamente \n"
-                  "id: G", str(info[2:]))
-            
-            if tipo == 69:
-            #Dibujamos el rectangulo
-                cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
-                cv2.putText(frame, 'ED' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
-                print("Registro de Area CONTABILIDAD exitosamente \n"
-                      "id: E", str(info[2:]))
-            
-            if tipo == 73:
-            #Dibujamos el rectangulo
-                cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
-                cv2.putText(frame, 'S0' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
-                print("Registro de Area SERVICIOS exitosamente \n"
-                      "id: S", str(info[2:]))
+            # if  8 >= h >= 12:
+                
+                cv2.polylines(frame, [pts], True, (255, 255, 0), 5)   
             
             #Guardamos el ID 
                 if codigo not in Entrada:
@@ -127,16 +130,17 @@ while True:
                     datos = hojas.append(Entrada)
                     wb.save(nomar + '.xlsx')
 
-            
+                #Dibujamos 
+                cv2.putText(frame, '0' + str(num), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)  
 
-     #Avisamos 
+        #Avisamos 
         elif codigo in Entrada:
                 cv2.putText(frame, 'EL ID ' + str(codigo),
                         (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 cv2.putText(frame, 'YA FUE REGISTRADO',
                         (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 
-                print(Entrada)
+        #print(Entrada)
 
 
     #Mostramos el frame
