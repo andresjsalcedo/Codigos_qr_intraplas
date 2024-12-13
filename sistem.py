@@ -132,9 +132,9 @@ while True:
      #Avisamos 
         elif codigo in Entrada:
                 cv2.putText(frame, 'EL ID ' + str(codigo),
-                        (xi - 65, yi - 45), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                        (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 cv2.putText(frame, 'YA FUE REGISTRADO',
-                        (xi - 65, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                        (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 
                 print(Entrada)
 
