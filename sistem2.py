@@ -110,7 +110,6 @@ while True:
 
             #  ENTRADA DIURNO
             #   if 8 >= h >= 12:
-
                 # Guardamos el ID 
                 if codigo not in Entrada:             
                     # Agregamos el ID
@@ -134,7 +133,7 @@ while True:
                     cv2.putText(frame, 'YA FUE REGISTRADO',
                             (xi - 45, yi - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                     
-                print(str(codigo), "ENTRADA REGISTRADA A LAS", str(texth))
+                print( "ENTRADA REGISTRADA A LAS", str(texth))
 
             # Actualiza variables de control de impresión
             ultimo_codigo_detectado = codigo
