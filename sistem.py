@@ -3,6 +3,7 @@ from pyzbar.pyzbar import decode
 import numpy as np
 from datetime import datetime
 import openpyxl as xl
+import time 
 
 
 #Creamos la videocaptura
@@ -63,6 +64,7 @@ while True:
     wb = xl.Workbook()
 
 
+
     #leemos los codigos QR
     for codes in decode(frame):
         #Extraemos el valor
@@ -85,17 +87,20 @@ while True:
         #Redireccionamos
         pts = pts.reshape((-1, 1, 2))
 
+        #ID de los codigos QR
+        codigo = letr + num
+
         if tipo == 71:
             #Dibujamos el rectangulo
             cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
-            cv2.putText(frame, 'G0' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+            cv2.putText(frame, 'G' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
             print("Regitro de AREA RECURSOS exitosamente \n"
                   "id: G", str(info[2:]))
             
         if tipo == 69:
             #Dibujamos el rectangulo
             cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
-            cv2.putText(frame, 'ED' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+            cv2.putText(frame, 'E' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
             print("Registro de Area CONTABILIDAD exitosamente \n"
                   "id: E", str(info[2:]))
             
@@ -103,44 +108,45 @@ while True:
         if tipo == 83:
             #Dibujamos el rectangulo
             cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
-            cv2.putText(frame, 'S0' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+            cv2.putText(frame, 'S' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
             print("Registro de Area SISTEMAS exitosamente \n"
                   "id: S", str(info[2:]))
-
-        #ID de los codigos QR
-        codigo = letr + num
 
 
         #SEMANA 
         if 4 >= diasem >= 0:
         
         #ENTRADA DIURNO
-            # if  8 >= h >= 12:
-                
-                cv2.polylines(frame, [pts], True, (255, 255, 0), 5)   
-            
+            #if  8 >= h >= 12:
+                  
             #Guardamos el ID 
-                if codigo not in Entrada:
-                    #Agregamos el ID
-                    pos = len(Entrada)
-                    Entrada.append(codigo)
+            if codigo not in Entrada:             
 
-                    #Guardamos DB
-                    hojas = wb.create_sheet("ENTRADAS")
-                    datos = hojas.append(Entrada)
-                    wb.save(nomar + '.xlsx')
+                #Agregamos el ID
+                pos = len(Entrada)
+                Entrada.append(codigo)
+
+                #Guardamos DB
+                hojas = wb.create_sheet("ENTRADAS")
+                datos = hojas.append(Entrada) 
+                wb.save(nomar + '.xlsx')
+
+                #Dibujamos  
+                cv2.polylines(frame,  [pts], True, (255, 255, 0), 5)
+                cv2.putText(frame, 'ENTRADA REGISTRADA', (xi - 45, yi - 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                cv2.putText(frame, 'CON EXITO' , (xi - 45, yi - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
                 #Dibujamos 
-                cv2.putText(frame, '0' + str(num), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)  
+                # cv2.putText(frame, '0' + str(num), (xi - 45, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)  
 
-        #Avisamos 
-        elif codigo in Entrada:
+            #Avisamos 
+            elif codigo in Entrada:
                 cv2.putText(frame, 'EL ID ' + str(codigo),
-                        (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                            (xi - 45, yi - 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 cv2.putText(frame, 'YA FUE REGISTRADO',
-                        (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                        (xi - 45, yi - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 
-        #print(Entrada)
+            # print(Entrada)
 
 
     #Mostramos el frame

@@ -4,7 +4,7 @@ from pyqrcode import QRCode
 import os
 
 # Ruta de destino de la carpeta
-carpeta_destino = 'C:/Users/VIVOBOOK/Desktop/Asistencias QR/QR'  # Cambia la ruta según tu necesidad
+carpeta_destino = 'C:/Users/andres.salcedo.INTRAPLAS/Desktop/Codigos_qr_intraplas/QR'  # Cambia la ruta según tu necesidad
 
 # Asegúrate de que la carpeta de destino exista, si no, créala
 if not os.path.exists(carpeta_destino):
@@ -46,7 +46,7 @@ while con <= 105:
     # Aumentamos el contador
     con = con + 1
 
-while con <= 108:
+while con <= 112:
     roster = con 
     id = '83' + str(con)
     
