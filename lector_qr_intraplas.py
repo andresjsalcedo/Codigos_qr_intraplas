@@ -37,11 +37,8 @@ class EscanerQR:
         """
         try:
             # Consulta para buscar el empleado
-            consulta = """
-            SELECT id, nombre, departamento 
-            FROM empleados_info 
-            WHERE id = %s
-            """
+            consulta = """ SELECT id, nombre, departamento FROM empleados_info WHERE id = %s """
+
             # Ejecutar consulta
             self.cursor.execute(consulta, (codigo,))
             
@@ -130,11 +127,12 @@ class EscanerQR:
                         cv2.putText(frame, 'ENTRADA REGISTRADA', 
                                     (codigo_qr.rect.left, codigo_qr.rect.top - 30), 
                                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
                     else:
-                        # QR no válido
-                        cv2.putText(frame, 'QR NO RECONOCIDO', 
-                                    (codigo_qr.rect.left, codigo_qr.rect.top - 30), 
-                                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                         # QR no válido
+                         cv2.putText(frame, 'QR NO RECONOCIDO', 
+                                     (codigo_qr.rect.left, codigo_qr.rect.top - 30), 
+                                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             
             # Mostrar frame
             cv2.imshow('Escáner QR', frame)
