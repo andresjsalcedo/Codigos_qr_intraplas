@@ -4,14 +4,18 @@ import numpy as np
 from datetime import datetime
 import openpyxl as xl
 import time 
+import _mysql_connector
+
+
+
 
 # Creamos la videocaptura
 cap = cv2.VideoCapture(0)
 
-# Comprobamos la camara
+    # Comprobamos la camara
 if not cap:
-    print("No se pudo abrir la camara")
-    exit()
+        print("No se pudo abrir la camara")
+        exit()
 
 # Variables de registro  
 Entrada = []
@@ -79,39 +83,88 @@ while True:
                 # Dibujamos el rectangulo
                 cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
                 cv2.putText(frame, 'G' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
-                print("Registro de AREA RECURSOS exitosamente \n"
-                      f"id: G{info[2:]}")
+                if codigo not in Entrada:
+                    print("Codigo Scaneado Correctamente \n"
+                      f"id: S{info[2:]} \n"
+                      "Nombre: Vanessa lozano")
+                    print("ENTRADA REGISTRADA A LAS", str(texth))
+
+                elif codigo in Entrada:
+                    print("El codigo ya ha sido registrado")
+            
+                    
                 
             if tipo == 69:
                 # Dibujamos el rectangulo
                 cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
                 cv2.putText(frame, 'E' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
-                print("Registro de Area CONTABILIDAD exitosamente \n"
-                      f"id: E{info[2:]}")
+                if codigo not in Entrada:
+                    print("Codigo Scaneado Correctamente \n"
+                      f"id: S{info[2:]} \n"
+                      "Nombre: Juan Torres")
+                    print("ENTRADA REGISTRADA A LAS", str(texth))
+
+                elif codigo in Entrada:
+                    print("El codigo ya ha sido registrado")
+
                 
             if tipo == 83:
                 # Dibujamos el rectangulo
                 cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
                 cv2.putText(frame, 'S' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
-                print("Registro de Area SISTEMAS exitosamente \n"
-                      f"id: S{info[2:]}")
+                if codigo not in Entrada:
+                    print("Codigo Scaneado Correctamente \n"
+                      f"id: S{info[2:]} \n"
+                      "Nombre: Andres Salcedo")
+                    print("ENTRADA REGISTRADA A LAS", str(texth))
+                    
+                elif codigo in Entrada:
+                    print("El codigo ya ha sido registrado")
+                
             # SEMANA 
             if 4 >= diasem >= 0:
+
             #  ENTRADA DIURNO
             #   if 8 >= h >= 12:
+
                 # Guardamos el ID 
                 if codigo not in Entrada:             
                     # Agregamos el ID
                     pos = len(Entrada)
                     Entrada.append(codigo)
+
                     # Guardamos DB
                     hojas = wb.create_sheet("ENTRADAS")
-                    datos = hojas.append(Entrada) 
+                    # datos = hojas.append(Entrada)
+                    # wb.save(nomar + '.xlsx')
+
+                    # Guardamos DB
+                    # Agregar encabezados
+
+                    hojas['A1'] = 'ID'
+                    hojas['B1'] = 'FECHA'
+                    hojas['C1'] = 'HORA'
+
+                    # Agregar datos para cada ID con su fecha y hora
+                    for fila, usuario_id in enumerate(Entrada, start=2):
+                    # Agregar ID
+                        hojas.cell(row=fila, column=1, value=usuario_id)
+    
+                    # Obtener fecha y hora actuales
+                    fecha_actual = datetime.now().strftime("%Y-%m-%d")
+                    hora_actual = datetime.now().strftime("%H:%M:%S")
+    
+                    # Agregar fecha y hora
+                    hojas.cell(row=fila, column=2, value=fecha_actual)
+                    hojas.cell(row=fila, column=3, value=hora_actual)
+
                     wb.save(nomar + '.xlsx')
+                    
                     # Dibujamos  
                     cv2.polylines(frame,  [pts], True, (255, 255, 0), 5)
                     cv2.putText(frame, 'ENTRADA REGISTRADA', (xi - 45, yi - 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                     cv2.putText(frame, 'CON EXITO' , (xi - 45, yi - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
                 # Avisamos si ya fue registrado
                 elif codigo in Entrada:
                     cv2.putText(frame, 'EL ID ' + str(codigo),
@@ -119,14 +172,16 @@ while True:
                     cv2.putText(frame, 'YA FUE REGISTRADO',
                             (xi - 45, yi - 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                     
-                print(str(codigo), "ENTRADA REGISTRADA A LAS", str(texth))
+
             # Actualiza variables de control de impresión
             ultimo_codigo_detectado = codigo
             tiempo_ultimo_registro = current_time
     # Mostramos el frame
+
     cv2.imshow('LECTOR DE QR', frame)
     t = cv2.waitKey(1)
     if t == 27:
         break
+
 cv2.destroyAllWindows()
 cap
