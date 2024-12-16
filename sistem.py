@@ -94,16 +94,16 @@ while True:
     if 4 >= diasem >= 0:
         
       #ENTRADA DIURNO
-      if  8 >= h >= 12:
+    #   if  8 >= h >= 12:
 
-        if tipo == 71:
+         if tipo == 71:
             #Dibujamos el rectangulo
             cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
             cv2.putText(frame, 'G' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
             print("Regitro de AREA RECURSOS exitosamente \n"
                   "id: G", str(info[2:]))
             
-        if tipo == 69:
+         if tipo == 69:
             #Dibujamos el rectangulo
             cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
             cv2.putText(frame, 'E' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
@@ -111,7 +111,7 @@ while True:
                   "id: E", str(info[2:]))
             
 
-        if tipo == 83:
+         if tipo == 83:
             #Dibujamos el rectangulo
             cv2.polylines(frame, [pts], True, (255, 255, 0), 5)
             cv2.putText(frame, 'S' + (info[2:]), (xi - 15, yi - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)

@@ -14,7 +14,7 @@ if not os.path.exists(carpeta_destino):
 con = 100
 
 # Generamos el código QR
-while con <= 102:
+while con <= 101:
     roster = con 
     id = '71' + str(con)
     
@@ -30,7 +30,7 @@ while con <= 102:
     # Aumentamos el contador
     con = con + 1
 
-while con <= 105:
+while con <= 103:
     roster = con 
     id = '69' + str(con)
     
@@ -46,7 +46,7 @@ while con <= 105:
     # Aumentamos el contador
     con = con + 1
 
-while con <= 112:
+while con <= 105:
     roster = con 
     id = '83' + str(con)
     
