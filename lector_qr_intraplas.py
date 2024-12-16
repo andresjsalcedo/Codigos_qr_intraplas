@@ -51,9 +51,8 @@ class EscanerQR:
             return None
 
     def registrar_entrada(self, empleado, hora, fecha):
-        """
-        Registra la entrada del empleado en un archivo Excel
-        """
+        
+        #Registra la entrada del empleado en un archivo Excel
         try:
             # Crear libro de Excel
             wb = xl.Workbook()
@@ -63,14 +62,16 @@ class EscanerQR:
             # Encabezados
             hoja['A1'] = 'ID'
             hoja['B1'] = 'NOMBRE'
-            hoja['C1'] = 'FECHA'
-            hoja['D1'] = 'HORA'
+            hoja['C1'] = 'AREA'
+            hoja['D1'] = 'FECHA'
+            hoja['E1'] = 'HORA'
             
             # Datos
             hoja['A2'] = empleado['id']
-            hoja['B2'] = f"{empleado['nombre']} {empleado['departamento']}"
-            hoja['C2'] = fecha
-            hoja['D2'] = hora
+            hoja['B2'] = f"{empleado['nombre']}" 
+            hoja['C2'] = f"{empleado['departamento']}"
+            hoja['D2'] = fecha
+            hoja['E2'] = hora
             
             # Nombre de archivo
             nombre_archivo = f"{fecha}.xlsx"
@@ -85,9 +86,8 @@ class EscanerQR:
             print(f"Error al registrar entrada: {e}")
 
     def iniciar_escaneo(self):
-        """
-        Iniciar el escaneo continuo de códigos QR
-        """
+        
+        #Iniciar el escaneo continuo de códigos QR
         while True:
             # Leer frame
             ret, frame = self.cap.read()
