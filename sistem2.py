@@ -3,10 +3,9 @@ from pyzbar.pyzbar import decode
 import numpy as np
 from datetime import datetime
 import openpyxl as xl
-import time 
-import _mysql_connector
-
-
+import time
+from config import config  
+import os 
 
 
 # Creamos la videocaptura
@@ -117,7 +116,7 @@ while True:
                       f"id: S{info[2:]} \n"
                       "Nombre: Andres Salcedo")
                     print("ENTRADA REGISTRADA A LAS", str(texth))
-                    
+
                 elif codigo in Entrada:
                     print("El codigo ya ha sido registrado")
                 
@@ -132,6 +131,8 @@ while True:
                     # Agregamos el ID
                     pos = len(Entrada)
                     Entrada.append(codigo)
+
+                    carpeta_destino = 'C:/Users/andres.salcedo.INTRAPLAS/Desktop/Codigos_qr_intraplas/Asistencias'  # Cambia la ruta según tu necesidad
 
                     # Guardamos DB
                     hojas = wb.create_sheet("ENTRADAS")
@@ -158,7 +159,9 @@ while True:
                     hojas.cell(row=fila, column=2, value=fecha_actual)
                     hojas.cell(row=fila, column=3, value=hora_actual)
 
-                    wb.save(nomar + '.xlsx')
+                    entradas_excel = (nomar + '.xlsx')
+                    entradas_excel = os.path.join(carpeta_destino, str(nomar + '.xlsx'))
+                    wb.save (entradas_excel)
                     
                     # Dibujamos  
                     cv2.polylines(frame,  [pts], True, (255, 255, 0), 5)
