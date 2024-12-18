@@ -133,6 +133,16 @@ class EscanerQR:
                          cv2.putText(frame, 'QR NO RECONOCIDO', 
                                      (codigo_qr.rect.left, codigo_qr.rect.top - 30), 
                                      cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                         
+                elif codigo in self.codigos_registrados:
+                     # Dibujar en el frame
+                        pts = np.array([codigo_qr.polygon], np.int32)
+                        pts = pts.reshape((-1, 1, 2))
+                        cv2.polylines(frame, [pts], True, (0, 255, 0), 5)
+                        cv2.putText(frame, 'REGISTRO YA EXISTENTE', 
+                                    (codigo_qr.rect.left, codigo_qr.rect.top - 30), 
+                                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                        print(f"{empleado['nombre']} ya cuenta con una entrada registrada")         
             
             # Mostrar frame
             cv2.imshow('Escáner QR', frame)
