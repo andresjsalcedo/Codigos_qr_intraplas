@@ -5,15 +5,16 @@ from datetime import datetime
 import openpyxl as xl
 import time
 import os
-import mysql.connector
+import psycopg2
+
 
 class EscanerQR:
     def __init__(self):
-        # Configuración de conexión a la base de datos MySQL
-        self.conexion = mysql.connector.connect(
+        # Configuración de conexión a la base de datos PostgreSQL
+        self.conexion = psycopg2.connect(
             host='localhost',
-            database='empleados',
-            user='root',
+            database='empleados_id',
+            user='postgres',
             password='root'
         )
         self.cursor = self.conexion.cursor(dictionary=True)
@@ -35,42 +36,44 @@ class EscanerQR:
         
         #Valida el código QR contra la base de datos de empleados
         try:
-            # Consulta para buscar el empleado
-            consulta = """ SELECT id, nombre, departamento FROM empleados_info WHERE id = %s """
+            # Consulta para buscar el empleados_id
+            consulta = """ SELECT id, nombre, departamento, Tokens FROM empleados_id WHERE id = %s """
 
             # Ejecutar consulta
             self.cursor.execute(consulta, (codigo,))
             
             # Obtener resultado
-            empleado = self.cursor.fetchone()
+            empleados_id = self.cursor.fetchone()
             
-            return empleado
+            return empleados_id
         except Exception as e:
             print(f"Error al validar código: {e}")
             return None
 
-    def registrar_entrada(self, empleado, hora, fecha):
+    def registrar_entrada(self, empleados_id,Tokens,  hora, fecha):
         
-        #Registra la entrada del empleado en un archivo Excel
+        #Registra la entrada del empleados_id en un archivo Excel
         try:
             # Crear libro de Excel
             wb = xl.Workbook()
             hoja = wb.active
-            hoja.title = "ENTRADAS"
+            hoja.title = "Consumo_tokens"
             
             # Encabezados
             hoja['A1'] = 'ID'
             hoja['B1'] = 'NOMBRE'
             hoja['C1'] = 'AREA'
-            hoja['D1'] = 'FECHA'
-            hoja['E1'] = 'HORA'
+            hoja['D1'] = 'TOKENS'
+            hoja['E1'] = 'FECHA'
+            hoja['F1'] = 'HORA'
             
             # Datos
-            hoja['A2'] = empleado['id']
-            hoja['B2'] = f"{empleado['nombre']}" 
-            hoja['C2'] = f"{empleado['departamento']}"
-            hoja['D2'] = fecha
-            hoja['E2'] = hora
+            hoja['A2'] = empleados_id['id']
+            hoja['B2'] = f"{empleados_id['nombre']}" 
+            hoja['C2'] = f"{empleados_id['departamento']}"
+            hoja['D2'] = f"{empleados_id['Tokens']}"
+            hoja['E2'] = fecha
+            hoja['F2'] = hora
             
             # Nombre de archivo
             nombre_archivo = f"{fecha}.xlsx"
@@ -79,7 +82,7 @@ class EscanerQR:
             # Guardar
             
             wb.save(ruta_completa)
-            print(f"Entrada registrada para {empleado['nombre']} del area {empleado['departamento']} el {fecha} a las {hora}")
+            print(f"Token de almuerzo de {empleados_id['nombre']} del area {empleados_id['departamento']} fue consumido el {fecha} a las {hora} tokens restantes: {Tokens}")
         
         except Exception as e:
             print(f"Error al registrar entrada: {e}")
@@ -109,12 +112,12 @@ class EscanerQR:
                 
                 # Validar y registrar si no ha sido registrado
                 if codigo not in self.codigos_registrados:
-                    # Buscar empleado
-                    empleado = self.validar_codigo_qr(codigo)
+                    # Buscar empleados_id
+                    empleados_id = self.validar_codigo_qr(codigo)
                     
-                    if empleado:
+                    if empleados_id:
                         # Registrar entrada
-                        self.registrar_entrada(empleado, hora, fecha)
+                        self.registrar_entrada(empleados_id, hora, fecha)
                         
                         # Marcar como registrado
                         self.codigos_registrados.add(codigo)
@@ -141,7 +144,7 @@ class EscanerQR:
                         cv2.putText(frame, 'REGISTRO YA EXISTENTE', 
                                     (codigo_qr.rect.left, codigo_qr.rect.top - 30), 
                                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                        print(f"{empleado['nombre']} ya cuenta con una entrada registrada")         
+                        print(f"{empleados_id['nombre']} ya cuenta con una entrada registrada")         
             
             # Mostrar frame
             cv2.imshow('Escáner QR', frame)
