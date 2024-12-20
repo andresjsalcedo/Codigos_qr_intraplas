@@ -36,7 +36,7 @@ class EscanerQR:
         #Valida el código QR contra la base de datos de empleados
         try:
             # Consulta para buscar el empleado
-            consulta = """ SELECT id, nombre, departamento FROM empleados_info WHERE id = %s """
+            consulta = """ SELECT id, nombre, departamento, tokens_almuerzo FROM empleados_info WHERE id = %s """
 
             # Ejecutar consulta
             self.cursor.execute(consulta, (codigo,))
@@ -62,15 +62,17 @@ class EscanerQR:
             hoja['A1'] = 'ID'
             hoja['B1'] = 'NOMBRE'
             hoja['C1'] = 'AREA'
-            hoja['D1'] = 'FECHA'
-            hoja['E1'] = 'HORA'
+            hoja['D1'] = 'TOKENS'
+            hoja['E1'] = 'FECHA'
+            hoja['F1'] = 'HORA'
             
             # Datos
             hoja['A2'] = empleado['id']
             hoja['B2'] = f"{empleado['nombre']}" 
             hoja['C2'] = f"{empleado['departamento']}"
-            hoja['D2'] = fecha
-            hoja['E2'] = hora
+            hoja['D2'] = f"{empleado['tokens_almuerzo']}"
+            hoja['E2'] = fecha
+            hoja['F2'] = hora
             
             # Nombre de archivo
             nombre_archivo = f"{fecha}.xlsx"
@@ -79,7 +81,7 @@ class EscanerQR:
             # Guardar
             
             wb.save(ruta_completa)
-            print(f"Entrada registrada para {empleado['nombre']} del area {empleado['departamento']} el {fecha} a las {hora}")
+            print(f"Consumo de token para {empleado['nombre']} del area {empleado['departamento']} el {fecha} a las {hora}, te quedan {empleado['tokens_almuerzo'] -1} tokens")
         
         except Exception as e:
             print(f"Error al registrar entrada: {e}")
@@ -134,14 +136,14 @@ class EscanerQR:
                                      cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                          
                 elif codigo in self.codigos_registrados:
-                     # Dibujar en el frame
-                        pts = np.array([codigo_qr.polygon], np.int32)
-                        pts = pts.reshape((-1, 1, 2))
-                        cv2.polylines(frame, [pts], True, (0, 255, 0), 5)
-                        cv2.putText(frame, 'REGISTRO YA EXISTENTE', 
-                                    (codigo_qr.rect.left, codigo_qr.rect.top - 30), 
-                                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                        print(f"{empleado['nombre']} ya cuenta con una entrada registrada")         
+                      # Dibujar en el frame
+                         pts = np.array([codigo_qr.polygon], np.int32)
+                         pts = pts.reshape((-1, 1, 2))
+                         cv2.polylines(frame, [pts], True, (0, 255, 0), 5)
+                         cv2.putText(frame, 'REGISTRO YA EXISTENTE', 
+                                     (codigo_qr.rect.left, codigo_qr.rect.top - 30), 
+                                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                         print(f"{empleado['nombre']} ya cuenta con una consuimo de token registrado, tokens restantes: {empleado['tokens_almuerzo']}")         
             
             # Mostrar frame
             cv2.imshow('Escáner QR', frame)
