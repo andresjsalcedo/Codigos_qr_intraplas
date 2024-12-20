@@ -15,6 +15,7 @@ try:
     connection = mysql.connector.connect(**config)
     if connection.is_connected():
         print("Conexión exitosa a la base de datos")
+
 except mysql.connector.Error as err:
     print(f"Error: {err}")
 # finally:

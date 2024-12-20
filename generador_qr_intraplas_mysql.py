@@ -5,16 +5,15 @@ import mysql.connector
 from mysql.connector import Error
 
 def generar_codigos_qr(QR_INTRAPLAS):
-    """
-    Genera códigos QR únicos para cada empleado desde la base de datos MySQL
-    
-    :param QR_INTRAPLAS: Directorio donde se guardarán los códigos QR
-    """
+
+    #Genera códigos QR únicos para cada empleado desde la base de datos MySQL
+    #Para QR_INTRAPLAS: Directorio donde se guardarán los códigos QR
+
     try:
         # Configuración de conexión a la base de datos MySQL
         conexion = mysql.connector.connect(
-            host='localhost',  # Cambia esto por tu host
-            database='empleados',  # Nombre de tu base de datos
+            host='localhost',  # nombre del host
+            database='empleados',  # Nombre de  base de datos
             user='root',  # Tu nombre de usuario de MySQL
             password='root'  # Tu contraseña de MySQL
         )
@@ -27,7 +26,9 @@ def generar_codigos_qr(QR_INTRAPLAS):
         cursor = conexion.cursor()
         
         # Consulta para obtener información de empleados
-        consulta = """ SELECT id, nombre, departamento FROM empleados_info """
+        consulta = """ SELECT id, nombre, departamento, tokens_almuerzo FROM empleados_info """
+
+        print(consulta)
         
         # Ejecutar la consulta
         cursor.execute(consulta)
@@ -44,6 +45,7 @@ def generar_codigos_qr(QR_INTRAPLAS):
             id = empleado[0]
             nombre = empleado[1]
             departamento = empleado[2]
+            tokens_almuerzo = empleado[3]
             
             # Crear identificador único 
             id_unico = f"{id}"
@@ -63,7 +65,7 @@ def generar_codigos_qr(QR_INTRAPLAS):
             qr.png(ruta_archivo, scale=6)
             
             total_generados += 1
-            print(f"Generado código QR para {nombre} {departamento}")
+            print(f"Generado código QR para {nombre} del {departamento}, cuenta con {tokens_almuerzo}")
         
         # Imprimir resumen
         print(f"\n--- Resumen ---")
